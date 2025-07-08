@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #121212;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-1: #FF6B6B;
+            --accent-2: #4ECDC4;
+            --accent-3: #FFE66D;
+            --accent-4: #7289da;
+            --card-hover: #1a1a1a;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(-45deg, #FF6B6B, #4ECDC4, #FFE66D, #7289da);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: none;
+            border-radius: 25px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #searchInput:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.2);
+            transform: scale(1.02);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .app-card {
+            cursor: pointer;
+            background-color: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out forwards;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-2);
+        }
+
+        .app-card h3 {
+            color: var(--accent-2);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .app-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .app-details {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 10, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .app-details.active {
+            display: block;
+            opacity: 1;
+            animation: slideIn 0.2s ease-out;
+        }
+
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg) scale(1.1);
+            background: var(--accent-2);
+        }
+
+        .app-header {
+            background: linear-gradient(-45deg, var(--accent-1), var(--accent-2));
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            animation: gradient 15s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        .app-icon-large {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+            color: white;
+        }
+
+        .screenshot-container {
+            display: flex;
+            gap: 1rem;
+            padding: 2rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-2) var(--bg-secondary);
+        }
+
+        .screenshot {
+            flex: 0 0 300px;
+            height: 600px;
+            border-radius: 20px;
+            scroll-snap-align: start;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .screenshot:hover {
+            transform: scale(1.05);
+        }
+
+        .app-info {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            margin-top: -50px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(10px);
+            background: var(--card-hover);
+        }
+
+        .install-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--accent-1), var(--accent-2));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .install-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .install-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        
+    .download-section {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: var(--bg-primary);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .download-info {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .download-info span {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .app-size::before {
+        content: '\f019';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        color: var(--accent-2);
+    }
+
+    .app-version::before {
+        content: '\f021';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        color: var(--accent-1);
+    }
+
+    .android-req::before {
+        content: '\f17b';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        color: var(--accent-3);
+    }
+
+    .download-progress {
+        margin: 1.5rem 0;
+        background: var(--bg-secondary);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        height: 8px;
+        display: none;
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(45deg, var(--accent-1), var(--accent-2));
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.8rem;
+        color: var(--text-primary);
+    }
+
+    .download-error {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 87, 87, 0.1);
+        border-radius: 10px;
+        margin-top: 1rem;
+        border: 1px solid rgba(255, 87, 87, 0.3);
+    }
+
+    .download-error i {
+        color: #ff5757;
+        font-size: 1.2rem;
+    }
+
+    .error-message {
+        color: var(--text-primary);
+        flex: 1;
+    }
+
+    .retry-btn {
+        background: var(--accent-1);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .retry-btn:hover {
+        background: var(--accent-2);
+        transform: translateY(-2px);
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .install-btn {
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+    .install-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 30px;
+        z-index: 2000;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+        .download-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .toast {
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+    }
+        .tech-stack {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            background-color: var(--bg-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--accent-3);
+            transition: all 0.3s ease;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 4rem 0 2rem;
+            padding: 2rem;
+            background: linear-gradient(-45deg, var(--accent-1), var(--accent-2));
+            border-radius: 15px;
+            color: white;
+            animation: gradient 15s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .section-container {
+            transition: opacity 0.3s ease;
+        }
+        
+        .section-container.hidden {
+            display: none;
+        }
+        
+        .section-container.visible {
+            display: block;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .tech-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        
+        .hidden {
+            display: none;
+        }
+        .developers {
+            background-color: var(--bg-secondary);
+            padding: 4rem 0;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .developers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .developer-card {
+            background: linear-gradient(145deg, var(--bg-primary), var(--bg-secondary));
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-out forwards;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .developer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .developer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+        }
+        
+        .developer-image {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .developer-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-2);
+            padding: 3px;
+            background: var(--bg-primary);
+            transition: transform 0.3s ease;
+        }
+        
+        .developer-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .developer-info {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .developer-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-2);
+            margin-bottom: 0.5rem;
+        }
+        
+        .developer-role {
+            font-size: 1.1rem;
+            color: var(--accent-1);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .developer-bio {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+        
+        .skill-tag {
+            background: rgba(78, 205, 196, 0.1);
+            color: var(--accent-2);
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-tag:hover {
+            background: rgba(78, 205, 196, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.8rem;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-links a:hover {
+            color: var(--accent-2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-2);
+        }
+        
+
+        @media (max-width: 768px) {
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .app-info {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .screenshot-container {
+                padding: 1rem;
+            }
+            .developers-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            
+            .developer-card {
+                padding: 2rem;
+            }
+
+            .screenshot {
+                flex: 0 0 250px;
+                height: 500px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-rocket"></i> App Portfolio</h1>
+        <p>Discover Our Amazing Applications</p>
+    </header>
+
+    <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search apps...">
+    </div>
+
+    <main class="container">
+
+        <!-- Collaborative Projects Section -->
+    <div class="section-container" data-section="collaborative">
+    <div class="section-header">
+        <h2><i class="fas fa-users"></i> Collaborative Projects</h2>
+        <p>Projects we built together combining our expertise</p>
+    </div>
+
+    <div class="section-grid">
+        <!-- ISF App Card -->
+        <div class="app-card" data-app-id="isfApp" data-tags="club management events meetings collaborative" data-author="collaborative">
+            <i class="fas fa-users app-icon" style="color: var(--accent-3)"></i>
+            <h3><i class="fas fa-calendar-alt"></i> ISF App</h3>
+            <p>The ISF App (IETE Student Forum) streamlines club activities, manages events, schedules meetings, and enhances collaboration among members.</p>
+            <div class="tech-stack">
+                <span class="tech-tag"><i class="fas fa-code"></i> Kotlin</span>
+                <span class="tech-tag"><i class="fas fa-paint-brush"></i> Jetpack Compose</span>
+                <span class="tech-tag"><i class="fas fa-code"></i> Java</span>
+                <span class="tech-tag"><i class="fas fa-cloud"></i> Firebase</span>
+                <span class="tech-tag"><i class="fas fa-layer-group"></i> MVVM</span>
+            </div>
+        </div>
+
+        <!-- Connectify App Card -->
+        <div class="app-card" data-app-id="connectify" data-tags="social networking colleges connections collaborative" data-author="collaborative">
+            <i class="fas fa-users app-icon" style="color: var(--accent-3)"></i>
+            <h3><i class="fas fa-comments"></i> Connectify</h3>
+            <p>Connectify is a platform tailored for college students and professionals to build connections, share knowledge, and collaborate.</p>
+            <div class="tech-stack">
+                <span class="tech-tag"><i class="fas fa-code"></i> Kotlin</span>
+                <span class="tech-tag"><i class="fas fa-paint-brush"></i> Jetpack Compose</span>
+                <span class="tech-tag"><i class="fas fa-layer-group"></i> MVVM</span>
+                <span class="tech-tag"><i class="fas fa-cloud"></i> Firebase</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!-- Aryan's Projects Section -->
+        <div class="section-container" data-section="aryan">
+            <div class="section-header">
+                <h2><i class="fas fa-code"></i> Projects by Aryan Jaiswal</h2>
+                <p>Android applications crafted with precision</p>
+            </div>
+            <div class="section-grid">
+                <!-- Updated TimeTable App Card -->
+                <div class="app-card" data-app-id="timeTable" data-tags="education schedule timetable aryan" data-author="aryan">
+                    <i class="fas fa-calendar-alt app-icon" style="color: var(--accent-1)"></i>
+                    <h3><i class="fas fa-clock"></i> JUET TimeTable</h3>
+                    <p>A comprehensive timetable management system for JUET students and faculty to track lecture schedules across semesters and batches.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag"><i class="fab fa-android"></i> Android</span>
+                        <span class="tech-tag"><i class="fab fa-java"></i> Kotlin</span>
+                        <span class="tech-tag"><i class="fas fa-database"></i> Room DB</span>
+                    </div>
+                </div>
+        
+                <!-- New News World App Card -->
+                <div class="app-card" data-app-id="newsWorld" data-tags="news media current-affairs aryan" data-author="aryan">
+                    <i class="fas fa-newspaper app-icon" style="color: var(--accent-4)"></i>
+                    <h3><i class="fas fa-globe"></i> News World</h3>
+                    <p>Stay informed with the latest news across various categories. Get real-time updates and personalized news feeds. Category Filter Options</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag"><i class="fab fa-android"></i> Android</span>
+                        <span class="tech-tag"><i class="fab fa-java"></i> Kotlin</span>
+                        <span class="tech-tag"><i class="fas fa-server"></i> REST API</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avinash's Projects Section -->
+        
+        <div class="section-container" data-section="avinash">
+            <div class="section-header">
+                <h2><i class="fas fa-mobile-alt"></i> Projects by Avinash Sharma</h2>
+                <p>Cross-platform mobile applications with cutting-edge technology</p>
+            </div>
+            <div class="section-grid">
+                <div class="app-card" data-app-id="whatsTheTime" data-tags="time world-clock timezone avinash" data-author="avinash">
+                    <i class="fas fa-clock app-icon" style="color: var(--accent-2)"></i>
+                    <h3><i class="far fa-clock"></i> WhatsTheTime</h3>
+                    <p>A cross-platform application that helps users keep track of time across different cities around the world. The app provides a user-friendly interface to view the current time in various time zones and offers additional features such as analog and digital clock displays.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag"><i class="fas fa-mobile-alt"></i> KMP</span>
+                        <span class="tech-tag"><i class="fab fa-android"></i> Android</span>
+                        <span class="tech-tag"><i class="fab fa-apple"></i> iOS</span>
+                    </div>
+                </div>
+
+                <div class="app-card" data-app-id="spotifyClone" data-tags="music streaming audio player avinash" data-author="avinash">
+                    <i class="fas fa-music app-icon" style="color: var(--accent-2)"></i>
+                    <h3><i class="fab fa-spotify"></i> MusicStream</h3>
+                    <p>A feature-rich music streaming application that allows users to discover, play, and manage their favorite music. Built with modern architecture and offering a seamless cross-platform experience for music lovers.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag"><i class="fas fa-mobile-alt"></i> KMP</span>
+                        <span class="tech-tag"><i class="fab fa-android"></i> Android</span>
+                        <span class="tech-tag"><i class="fab fa-apple"></i> iOS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Details Sections -->
+
+        <div id="isfAppDetails" class="app-details">
+            <button class="close-btn" aria-label="Close details"><i class="fas fa-times"></i></button>
+            <div class="app-header">
+                <i class="fas fa-users app-icon-large" style="color: white"></i>
+                <h2>ISF App</h2>
+                <p>Version 1.0.0</p>
+            </div>
+            <div class="screenshot-container">
+                <!-- Added loading="lazy" for better performance -->
+                <img src="assets/ISF/one.jpg" alt="ISF App Screenshot 1" class="screenshot" loading="lazy">
+                <img src="assets/ISF/two.jpg" alt="ISF App Screenshot 2" class="screenshot" loading="lazy">
+                <img src="assets/ISF/three.jpg" alt="ISF App Screenshot 3" class="screenshot" loading="lazy">
+                <img src="assets/ISF/four.jpg" alt="ISF App Screenshot 4" class="screenshot" loading="lazy">
+                <img src="assets/ISF/five.jpg" alt="ISF App Screenshot 5" class="screenshot" loading="lazy">
+            </div>
+            <div class="app-info">
+                <h3 style="margin-bottom: 20px; text-align: center;">About ISF App</h3>
+                <p>The IETE Student Forum (ISF) App is a comprehensive platform designed to streamline and enhance the management of student forum activities within educational institutions. It serves as a central hub for coordinating events, meetings, and member activities, making it easier for student leaders and faculty advisors to maintain effective communication and organization within the forum.</p>
+                
+                <p style="margin-top: 20px;">Built with modern Android technologies, the ISF App revolutionizes how student forums operate by digitizing traditional management processes. From tracking attendance at events to managing forum inventory, the app provides a seamless experience for both organizers and members. It eliminates the need for multiple communication channels and paper-based systems, bringing everything together in one efficient, user-friendly platform.</p>
+        
+                <h3 style="margin-top: 20px;">Key Features</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Event Management with RSVP System</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-users-cog"></i>
+                        <span>Meeting Creation and Scheduling</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-user-friends"></i>
+                        <span>Interactive Members Directory</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-boxes"></i>
+                        <span>Inventory Management System</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Digital Attendance Tracking</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics and Reports</span>
+                    </div>
+                </div>
+        
+                <div class="download-section">
+                    <div class="download-info">
+                        <span class="app-size"><i class="fas fa-file-archive"></i> Size: 31.8 MB</span>
+                        <span class="app-version"><i class="fas fa-code-branch"></i> Version: 1.0.2</span>
+                        <span class="android-req"><i class="fab fa-android"></i> Requires Android 6.0+</span>
+                    </div>
+                    <button class="install-btn" data-app-id="isfApp" aria-label="Install ISF App">
+                        <i class="fas fa-download"></i> Install App
+                    </button>
+                    <div class="download-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar"></div>
+                        <span class="progress-text">0%</span>
+                    </div>
+                    <div class="download-error hidden">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="connectifyDetails" class="app-details">
+            <button class="close-btn"><i class="fas fa-times"></i></button>
+            <div class="app-header">
+                <i class="fas fa-users app-icon-large" style="color: white"></i>
+                <h2>Connectify</h2>
+                <p>Version 1.0.0</p>
+            </div>
+            <div class="screenshot-container">
+                <img src="assets\Connectify\one.png" alt="Connectify Screenshot 1" class="screenshot">
+                <img src="assets\Connectify\two.png" alt="Connectify Screenshot 2" class="screenshot">
+                <img src="assets\Connectify\three.png" alt="Connectify Screenshot 3" class="screenshot">
+                <img src="assets\Connectify\four.png" alt="Connectify Screenshot 3" class="screenshot">
+                <img src="assets\Connectify\five.png" alt="Connectify Screenshot 3" class="screenshot">
+
+            </div>
+            <div class="app-info">
+                <h3 style="margin-bottom: 20px; text-align: center;">About Connectify</h3>
+                <p>Connectify is a revolutionary platform that bridges the gap between students and professionals. Built specifically for educational communities, it provides a space for meaningful connections, knowledge sharing, and career development opportunities.</p>
+                <p style="margin-top: 20px;">It is easy to connect with professionals, receive mentorship, and find internships. Connectify empowers students to discover opportunities, build relationships, and advance their careers. They can connect with people of different colleges, industries, and backgrounds, all in one place.</p>
+        
+                <h3 style="margin-top: 20px;">Key Features</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Student-Professional Networking</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Referral Opportunities</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-comments"></i>
+                        <span>Collaborative Knowledge Sharing</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Chat Options for Real-Time Communication</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>Hackathon Listings and Participation</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-book"></i>
+                        <span>Access to Informative Articles and Resources</span>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <div class="download-info">
+                        <span class="app-size"><i class="fas fa-file-archive"></i> Size: 31.8 MB</span>
+                        <span class="app-version"><i class="fas fa-code-branch"></i> Version: 1.0.0</span>
+                        <span class="android-req"><i class="fab fa-android"></i> Requires Android 6.0+</span>
+                    </div>
+                    <button class="install-btn" data-app-id="isfApp" aria-label="Install ISF App">
+                        <i class="fas fa-download"></i> Install App
+                    </button>
+                    <div class="download-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar"></div>
+                        <span class="progress-text">0%</span>
+                    </div>
+                    <div class="download-error hidden">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div id="timeTableDetails" class="app-details">
+            <button class="close-btn"><i class="fas fa-times"></i></button>
+            <div class="app-header">
+                <i class="fas fa-calendar-alt app-icon-large" style="color: white"></i>
+                <h2>JUET TimeTable</h2>
+                <p>Version 1.0.0</p>
+            </div>
+            <div class="screenshot-container">
+                <img src="assets\TimeTable\one.png" alt="TimeTable Screenshot 1" class="screenshot">
+                <img src="assets\TimeTable\two.png" alt="TimeTable Screenshot 2" class="screenshot">
+                <img src="assets\TimeTable\three.png" alt="TimeTable Screenshot 3" class="screenshot">
+                <img src="assets\TimeTable\four.png" alt="TimeTable Screenshot 4" class="screenshot">
+            </div>
+
+            <div class="app-info">
+                <h3 style="margin-bottom: 20px; text-align: center;">About JUET TimeTable</h3>
+                <p style="margin-top: 20px;">JUET TimeTable is a comprehensive scheduling application designed specifically for JUET (Jaypee University of Engineering and Technology) students and faculty. It provides an intuitive interface to access and manage lecture schedules across different semesters, batches, and courses.</p>
+                
+                <h3 style="margin-top: 20px;">Key Features</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-calendar-week"></i>
+                        <span>Weekly Schedule View</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-users"></i>
+                        <span>Batch-wise Timetables</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Lecture Reminders</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-sync"></i>
+                        <span>Real-time Updates</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Semester-wise Organization</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Faculty Schedule Integration</span>
+                    </div>
+                </div>
+        
+                <div class="download-section">
+                    <div class="download-info">
+                        <span class="app-size"><i class="fas fa-file-archive"></i> Size: 31.8 MB</span>
+                        <span class="app-version"><i class="fas fa-code-branch"></i> Version: 1.0.0</span>
+                        <span class="android-req"><i class="fab fa-android"></i> Requires Android 6.0+</span>
+                    </div>
+                    <button class="install-btn" data-app-id="isfApp" aria-label="Install ISF App">
+                        <i class="fas fa-download"></i> Install App
+                    </button>
+                    <div class="download-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar"></div>
+                        <span class="progress-text">0%</span>
+                    </div>
+                    <div class="download-error hidden">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- News World Details -->
+
+        <div id="newsWorldDetails" class="app-details">
+            <button class="close-btn"><i class="fas fa-times"></i></button>
+            <div class="app-header">
+                <i class="fas fa-newspaper app-icon-large" style="color: white"></i>
+                <h2 >News World</h2>
+                <p>Version 1.0.0</p>
+            </div>
+            <div class="screenshot-container">
+                <img src="assets\News\one.png" alt="News World Screenshot 1" class="screenshot">
+                <img src="assets\News\two.png" alt="News World Screenshot 2" class="screenshot">
+                <img src="assets\News\three.png" alt="News World Screenshot 3" class="screenshot">
+            </div>
+            <div class="app-info">
+                <h3 style="margin-bottom: 20px; text-align: center;">About News World</h3>
+                <p style="margin-top: 20px;">News World is your gateway to staying informed about current events across the globe. With customizable news categories and real-time updates, you'll never miss important news that matters to you. The app provides a clean, intuitive interface for browsing news from various reliable sources.</p>
+                
+                <h3 style="margin-top: 20px;">Key Features</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Categorized News Sections</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Save Articles for Later</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Easy Sharing Options</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-globe"></i>
+                        <span>International Coverage</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Breaking News Alerts</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-moon"></i>
+                        <span>Dark Mode Support</span>
+                    </div>
+                </div>
+        
+                <div class="download-section">
+                    <div class="download-info">
+                        <span class="app-size"><i class="fas fa-file-archive"></i> Size: 31.8 MB</span>
+                        <span class="app-version"><i class="fas fa-code-branch"></i> Version: 1.0.0</span>
+                        <span class="android-req"><i class="fab fa-android"></i> Requires Android 6.0+</span>
+                    </div>
+                    <button class="install-btn" data-app-id="isfApp" aria-label="Install ISF App">
+                        <i class="fas fa-download"></i> Install App
+                    </button>
+                    <div class="download-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar"></div>
+                        <span class="progress-text">0%</span>
+                    </div>
+                    <div class="download-error hidden">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                
+        <div id="whatsTheTimeDetails" class="app-details">
+            <button class="close-btn"><i class="fas fa-times"></i></button>
+            <div class="app-header">
+                <i class="fas fa-clock app-icon-large" style="color: white"></i>
+                <h2>WhatsTheTime</h2>
+                <p>Version 1.0.0</p>
+            </div>
+            <div class="screenshot-container">
+                <img src="assets\WhatsTheTime\one.png" alt="WhatsTheTime Screenshot 1" class="screenshot">
+                <img src="assets\WhatsTheTime\two.png" alt="WhatsTheTime Screenshot 2" class="screenshot">
+                <img src="assets\WhatsTheTime\three.png" alt="WhatsTheTime Screenshot 3" class="screenshot">
+                <img src="assets\WhatsTheTime\four.png" alt="WhatsTheTime Screenshot 4" class="screenshot">
+            </div>
+            <div class="app-info">
+                <h3 style="margin-bottom: 20px; text-align: center;">About WhatsTheTime</h3>
+                <p style="margin-top: 20px;">WhatsTheTime is your ultimate world clock companion that helps you stay coordinated across different time zones. Whether you're managing international meetings or keeping in touch with friends and family worldwide, our app makes it simple to track time globally.</p>
+                
+                <h3 style="margin-top: 20px;">Key Features</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-list"></i>
+                        <span>Home Screen City List</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-search"></i>
+                        <span>City Search Bar</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="far fa-clock"></i>
+                        <span>Analog Watch Display</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Digital Clock Display</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Customizable Settings</span>
+                    </div>
+                </div>
+
+                <h3>Architecture</h3>
+                <p>Built with MVVM architecture for optimal performance and maintainability</p>
+
+                <div class="download-section">
+                    <div class="download-info">
+                        <span class="app-size"><i class="fas fa-file-archive"></i> Size: 12.7 MB</span>
+                        <span class="app-version"><i class="fas fa-code-branch"></i> Version: 1.0.0</span>
+                        <span class="android-req"><i class="fab fa-android"></i> Requires Android 8.0+</span>
+                    </div>
+                    <button class="install-btn" data-app-id="isfApp" aria-label="Install ISF App">
+                        <i class="fas fa-download"></i> Install App
+                    </button>
+                    <div class="download-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar"></div>
+                        <span class="progress-text">0%</span>
+                    </div>
+                    <div class="download-error hidden">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="spotifyCloneDetails" class="app-details">
+            <button class="close-btn"><i class="fas fa-times"></i></button>
+            <div class="app-header">
+                <i class="fas fa-music app-icon-large" style="color: white"></i>
+                <h2>MusicStream</h2>
+                <p>Version 1.0.0</p>
+            </div>
+            <div class="screenshot-container">
+                <img src="assets\Spotify\one.png" alt="MusicStream Home Screen" class="screenshot">
+                <img src="assets\Spotify\two.png" alt="MusicStream Player" class="screenshot">
+                <img src="assets\Spotify\three.png" alt="MusicStream Library" class="screenshot">
+            </div>
+            <div class="app-info">
+                <h3>About MusicStream</h3>
+                <p>MusicStream brings your favorite music to life with a powerful streaming platform that offers millions of songs, personalized playlists, and seamless playback across all your devices. Discover new artists, create custom playlists, and enjoy high-quality audio streaming.</p>
+                
+                <h3>Key Features</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-home"></i>
+                        <span>Personalized Home Feed</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-search"></i>
+                        <span>Advanced Music Search</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Music Player</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-list"></i>
+                        <span>Playlist Management</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-user"></i>
+                        <span>User Library</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-podcast"></i>
+                        <span>Podcast Support</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Top Charts</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-signal"></i>
+                        <span>Offline Mode</span>
+                    </div>
+                </div>
+
+                <h3>Technical Features</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-code-branch"></i>
+                        <span>MVVM Architecture</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-database"></i>
+                        <span>Local Caching</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-wifi"></i>
+                        <span>Background Playback</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Audio Equalizer</span>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <div class="download-info">
+                        <span class="app-size"><i class="fas fa-file-archive"></i> Size: 31.8 MB</span>
+                        <span class="app-version"><i class="fas fa-code-branch"></i> Version: 1.0.0</span>
+                        <span class="android-req"><i class="fab fa-android"></i> Requires Android 6.0+</span>
+                    </div>
+                    <button class="install-btn" data-app-id="isfApp" aria-label="Install ISF App">
+                        <i class="fas fa-download"></i> Install App
+                    </button>
+                    <div class="download-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar"></div>
+                        <span class="progress-text">0%</span>
+                    </div>
+                    <div class="download-error hidden">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+           
+            <section class="developers">
+                <h2 class="section-title">Meet the Team</h2>
+                <div class="developers-grid">
+                    <div class="developer-card">
+                        <div class="developer-image">
+                            <img src="assets/founders/Aryan.png" alt="Aryan Jaiswal">
+                        </div>
+                        <div class="developer-info">
+                            <h3 class="developer-name"><i class="fas fa-code"></i> Aryan Jaiswal</h3>
+                            <p class="developer-role"><i class="fas fa-briefcase"></i> Lead Android Developer</p>
+                            <p class="developer-bio">Passionate Android developer with 1+ years of experience in building high-performance mobile applications. Specializes in creating seamless user experiences and implementing complex architectural patterns. Strong advocate for clean code and best practices in mobile development.</p>
+                            <div class="skills-list">
+                                <span class="skill-tag">Kotlin</span>
+                                <span class="skill-tag">Java</span>
+                                <span class="skill-tag">Android SDK</span>
+                                <span class="skill-tag">MVVM</span>
+                                <span class="skill-tag">Jetpack Compose</span>
+                            </div>
+                            <div class="social-links">
+                                <a href="https://github.com/DebugWithAryan/" target="_blank" title="GitHub"><i class="fab fa-github fa-lg"></i></a>
+                                <a href="https://www.linkedin.com/in/aryanjaiswal1/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-lg"></i></a>
+                                <a href="https://portfolio-vert-nine-33.vercel.app/" target="_blank" title="Portfolio"><i class="fas fa-globe fa-lg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="developer-card">
+                        <div class="developer-image">
+                            <img src="assets/founders/Avinash.png" alt="Avinash Sharma">
+                        </div>
+                        <div class="developer-info">
+                            <h3 class="developer-name"><i class="fas fa-code"></i> Avinash Sharma</h3>
+                            <p class="developer-role"><i class="fas fa-briefcase"></i> Lead Mobile Developer</p>
+                            <p class="developer-bio">Innovative mobile developer specializing in Kotlin Multiplatform development. Expert in building cross-platform applications with a focus on code sharing and platform-specific optimizations. Passionate about mentoring and driving technical excellence in mobile development.</p>
+                            <div class="skills-list">
+                                <span class="skill-tag">Kotlin Multiplatform</span>
+                                <span class="skill-tag">Kotlin</span>
+                                <span class="skill-tag">Jetpack Compose</span>
+                                <span class="skill-tag">Android</span>
+                                <span class="skill-tag">iOS</span>
+                                <span class="skill-tag">Clean Architecture</span>
+                            </div>
+                            <div class="social-links">
+                                <a href="https://github.com/Avinash-Codes" target="_blank" title="GitHub"><i class="fab fa-github fa-lg"></i></a>
+                                <a href="https://www.linkedin.com/in/avinash-sharma-59406b280/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-lg"></i></a>
+                                <a href="https://x.com/i/flow/login?redirect_after_login=%2F_AvinashSharma_" target="_blank" title="Twitter"><i class="fab fa-twitter fa-lg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    </main>
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const appCards = document.querySelectorAll('.app-card');
+        const sections = document.querySelectorAll('.section-container');
+        const appDetails = document.querySelectorAll('.app-details');
+        const closeBtns = document.querySelectorAll('.close-btn');
+        const installBtns = document.querySelectorAll('.install-btn');
+
+
+        
+        const APP_DOWNLOADS = {
+            isfApp: {
+                url: 'https://github.com/DebugWithAryan/isf-updates/releases/download/1.0.2/ISF.apk',
+                filename: 'ISF_App.apk',
+            },
+            connectify: {
+                url: 'https://drive.google.com/uc?export=download&id=19HJmztKt5aI4L8oFtRT10I6ICwWhXWXG',
+                filename: 'Connectify.apk'
+            },
+            timeTable: {
+                url: 'https://github.com/DebugWithAryan/JUETTIMETABLE_UPDATES/releases/download/1.0.1/JUET_TimeTable.apk',
+                filename: 'JUET_TimeTable.apk'
+            },
+            newsWorld: {
+                url: 'https://github.com/DebugWithAryan/NewsWorldUpdate/releases/download/1.0.0/NewsWorld.apk',
+                filename: 'News_World.apk'
+            },
+            whatsTheTime: {
+                url: 'https://github.com/Avinash-Codes/whatsthetime-updates/releases/download/1.0.0/WhatsTheTime.apk',
+                filename: 'WhatsTheTime.apk'
+            }
+        };
+
+        
+async function handleInstallClick(btn, appId) {
+    if (btn.disabled) return;
+
+    const app = APP_DOWNLOADS[appId];
+    if (!app) {
+        showToast('App download information not found');
+        return;
+    }
+
+    const progressContainer = btn.nextElementSibling;
+    const progressBar = progressContainer.querySelector('.progress-bar');
+    
+    // Reset UI state
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting Download...';
+
+    try {
+        // Create download link
+        const a = document.createElement('a');
+        a.href = app.url;
+        a.download = app.filename;
+        a.target = '_blank'; // Open in new tab to handle GitHub downloads
+        a.rel = 'noopener noreferrer';
+        
+        // Trigger download
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Show success UI
+        progressBar.style.width = '100%';
+        btn.innerHTML = '<i class="fas fa-check"></i> Download Started';
+        showToast('Download initiated! Check your downloads folder.');
+        
+    } catch (error) {
+        console.error('Download error:', error);
+        showToast(`Download failed: ${error.message}`);
+        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Retry Download';
+        progressBar.style.width = '0%';
+    } finally {
+        // Reset UI after delay
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-download"></i> Install App';
+            progressContainer.style.display = 'none';
+        }, 3000);
+    }
+}
+
+    
+        // Create toast notification system
+       
+function showToast(message) {
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="fas ${message.includes('failed') ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.style.opacity = '1');
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+
+        // Add toast styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .toast {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                z-index: 1000;
+                animation: fadeInUp 0.3s ease;
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, 20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, 0);
+                }
+            }
+        `;
+        document.head.appendChild(style); 
+
+        document.querySelectorAll('.install-btn').forEach(btn => {
+            const appId = btn.closest('.app-details').id.replace('Details', '');
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleInstallClick(btn, appId);
+            });
+        });
+
+        
+        
+document.addEventListener('DOMContentLoaded', () => {
+    const installButtons = document.querySelectorAll('.install-btn');
+    installButtons.forEach(btn => {
+        const appId = btn.closest('.app-details').id.replace('Details', '');
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleInstallClick(btn, appId);
+        });
+    });
+});
+
+        // Function to close app details
+        function closeAppDetails(detailsElement) {
+            detailsElement.style.opacity = '0';
+            setTimeout(() => {
+                detailsElement.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                detailsElement.style.opacity = '1';
+                document.querySelector('.apps-grid').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        // Handle close buttons
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const details = btn.closest('.app-details');
+                if (details) {
+                    closeAppDetails(details);
+                }
+            });
+        });
+
+        // Add stagger effect to cards
+        appCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Search functionality
+
+        searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        const developersSection = document.querySelector('.developers');
+        
+        // If search is empty, show everything including developers section
+        if (searchTerm === '') {
+            sections.forEach(section => {
+                section.classList.remove('hidden');
+            });
+            appCards.forEach(card => {
+                card.classList.remove('hidden');
+            });
+            if (developersSection) {
+                developersSection.classList.remove('hidden');
+            }
+            return;
+        }
+
+        // Track if we found any matches for each section
+        const matchedSections = new Set();
+        const matchedCards = new Set();
+
+        // First pass: Check each card and mark matches
+        appCards.forEach(card => {
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            const description = card.querySelector('p').textContent.toLowerCase();
+            const tags = card.dataset.tags.toLowerCase();
+            const section = card.closest('.section-container');
+            const sectionId = section.dataset.section;
+
+            if (title.includes(searchTerm) || 
+                description.includes(searchTerm) || 
+                tags.includes(searchTerm)) {
+                matchedCards.add(card);
+                matchedSections.add(sectionId);
+            }
+        });
+
+        // Second pass: Hide/show cards and sections
+        appCards.forEach(card => {
+            if (matchedCards.has(card)) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        sections.forEach(section => {
+            if (matchedSections.has(section.dataset.section)) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+        });
+
+        // Hide developers section during search
+        if (developersSection) {
+            developersSection.classList.add('hidden');
+        }
+    });
+
+        // Handle card clicks
+        appCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const appId = card.getAttribute('data-app-id');
+                if (appId) {
+                    const detailsElement = document.getElementById(`${appId}Details`);
+                    if (detailsElement) {
+                        detailsElement.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                }
+            });
+        });
+
+        // Handle install buttons
+        installBtns.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const progressContainer = btn.nextElementSibling;
+                const progressBar = progressContainer.querySelector('.progress-bar');
+                
+                progressContainer.style.display = 'block';
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Installing...';
+
+                for (let i = 0; i <= 100; i++) {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    progressBar.style.width = `${i}%`;
+                }
+
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check"></i> Installed';
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        progressBar.style.width = '0%';
+                        btn.innerHTML = '<i class="fas fa-download"></i> Install App';
+                    }, 2000);
+                }, 1000);
+            });
+        });
+
+        // Smooth scroll for anchors
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
