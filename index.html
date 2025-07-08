@@ -720,6 +720,11 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-1);
         }
+
+        /* Display exactly two projects per row in the Projects section */
+        .section-container[data-section="Projects"] .section-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
     </style>
 </head>
 <body>
@@ -735,11 +740,11 @@
 
     <main class="container">
 
-        <!-- Collaborative Projects Section -->
-    <div class="section-container" data-section="collaborative">
+        <!--Projects Section -->
+    <div class="section-container" data-section="Projects">
     <div class="section-header">
-        <h2><i class="fas fa-users"></i> Collaborative Projects</h2>
-        <p>Projects we built together combining our expertise</p>
+        <h2><i class="fas fa-users"></i>Projects</h2>
+        <p>Projects built combining expertise and innovation</p>
     </div>
 
     <div class="section-grid">
@@ -769,17 +774,7 @@
                 <span class="tech-tag"><i class="fas fa-cloud"></i> Firebase</span>
             </div>
         </div>
-    </div>
-</div>
-
-
-        <!-- Aryan's Projects Section -->
-        <div class="section-container" data-section="aryan">
-            <div class="section-header">
-                <h2><i class="fas fa-code"></i> Projects by Aryan Jaiswal</h2>
-                <p>Android applications crafted with precision</p>
-            </div>
-            <div class="section-grid">
+   
                 <!-- Updated TimeTable App Card -->
                 <div class="app-card" data-app-id="timeTable" data-tags="education schedule timetable aryan" data-author="aryan">
                     <i class="fas fa-calendar-alt app-icon" style="color: var(--accent-1)"></i>
@@ -806,37 +801,7 @@
             </div>
         </div>
 
-        <!-- Avinash's Projects Section -->
-        
-        <div class="section-container" data-section="avinash">
-            <div class="section-header">
-                <h2><i class="fas fa-mobile-alt"></i> Projects by Avinash Sharma</h2>
-                <p>Cross-platform mobile applications with cutting-edge technology</p>
-            </div>
-            <div class="section-grid">
-                <div class="app-card" data-app-id="whatsTheTime" data-tags="time world-clock timezone avinash" data-author="avinash">
-                    <i class="fas fa-clock app-icon" style="color: var(--accent-2)"></i>
-                    <h3><i class="far fa-clock"></i> WhatsTheTime</h3>
-                    <p>A cross-platform application that helps users keep track of time across different cities around the world. The app provides a user-friendly interface to view the current time in various time zones and offers additional features such as analog and digital clock displays.</p>
-                    <div class="tech-stack">
-                        <span class="tech-tag"><i class="fas fa-mobile-alt"></i> KMP</span>
-                        <span class="tech-tag"><i class="fab fa-android"></i> Android</span>
-                        <span class="tech-tag"><i class="fab fa-apple"></i> iOS</span>
-                    </div>
-                </div>
-
-                <div class="app-card" data-app-id="spotifyClone" data-tags="music streaming audio player avinash" data-author="avinash">
-                    <i class="fas fa-music app-icon" style="color: var(--accent-2)"></i>
-                    <h3><i class="fab fa-spotify"></i> MusicStream</h3>
-                    <p>A feature-rich music streaming application that allows users to discover, play, and manage their favorite music. Built with modern architecture and offering a seamless cross-platform experience for music lovers.</p>
-                    <div class="tech-stack">
-                        <span class="tech-tag"><i class="fas fa-mobile-alt"></i> KMP</span>
-                        <span class="tech-tag"><i class="fab fa-android"></i> Android</span>
-                        <span class="tech-tag"><i class="fab fa-apple"></i> iOS</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+  
 
         <!-- App Details Sections -->
 
@@ -1275,15 +1240,15 @@
         </div>
            
             <section class="developers">
-                <h2 class="section-title">Meet the Team</h2>
+                <h2 class="section-title">Meet Me</h2>
                 <div class="developers-grid">
                     <div class="developer-card">
                         <div class="developer-image">
-                            <img src="assets/founders/Aryan.png" alt="Aryan Jaiswal">
+                            <img src="assets/founders/JAYESH PHOTO.jpg" alt="Aryan Jaiswal">
                         </div>
                         <div class="developer-info">
-                            <h3 class="developer-name"><i class="fas fa-code"></i> Aryan Jaiswal</h3>
-                            <p class="developer-role"><i class="fas fa-briefcase"></i> Lead Android Developer</p>
+                            <h3 class="developer-name"><i class="fas fa-code"></i> Jayesh Bansal</h3>
+                            <p class="developer-role"><i class="fas fa-briefcase"></i>Android Developer</p>
                             <p class="developer-bio">Passionate Android developer with 1+ years of experience in building high-performance mobile applications. Specializes in creating seamless user experiences and implementing complex architectural patterns. Strong advocate for clean code and best practices in mobile development.</p>
                             <div class="skills-list">
                                 <span class="skill-tag">Kotlin</span>
@@ -1293,36 +1258,14 @@
                                 <span class="skill-tag">Jetpack Compose</span>
                             </div>
                             <div class="social-links">
-                                <a href="https://github.com/DebugWithAryan/" target="_blank" title="GitHub"><i class="fab fa-github fa-lg"></i></a>
-                                <a href="https://www.linkedin.com/in/aryanjaiswal1/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-lg"></i></a>
-                                <a href="https://portfolio-vert-nine-33.vercel.app/" target="_blank" title="Portfolio"><i class="fas fa-globe fa-lg"></i></a>
+                                <a href="https://github.com/Harry0786" target="_blank" title="GitHub"><i class="fab fa-github fa-lg"></i></a>
+                                <a href="https://www.linkedin.com/in/jayesh-bansal-a99109166/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-lg"></i></a>
+                                
                             </div>
                         </div>
                     </div>
             
-                    <div class="developer-card">
-                        <div class="developer-image">
-                            <img src="assets/founders/Avinash.png" alt="Avinash Sharma">
-                        </div>
-                        <div class="developer-info">
-                            <h3 class="developer-name"><i class="fas fa-code"></i> Avinash Sharma</h3>
-                            <p class="developer-role"><i class="fas fa-briefcase"></i> Lead Mobile Developer</p>
-                            <p class="developer-bio">Innovative mobile developer specializing in Kotlin Multiplatform development. Expert in building cross-platform applications with a focus on code sharing and platform-specific optimizations. Passionate about mentoring and driving technical excellence in mobile development.</p>
-                            <div class="skills-list">
-                                <span class="skill-tag">Kotlin Multiplatform</span>
-                                <span class="skill-tag">Kotlin</span>
-                                <span class="skill-tag">Jetpack Compose</span>
-                                <span class="skill-tag">Android</span>
-                                <span class="skill-tag">iOS</span>
-                                <span class="skill-tag">Clean Architecture</span>
-                            </div>
-                            <div class="social-links">
-                                <a href="https://github.com/Avinash-Codes" target="_blank" title="GitHub"><i class="fab fa-github fa-lg"></i></a>
-                                <a href="https://www.linkedin.com/in/avinash-sharma-59406b280/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-lg"></i></a>
-                                <a href="https://x.com/i/flow/login?redirect_after_login=%2F_AvinashSharma_" target="_blank" title="Twitter"><i class="fab fa-twitter fa-lg"></i></a>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </section>
     </main>
@@ -1342,7 +1285,7 @@
                 filename: 'ISF_App.apk',
             },
             connectify: {
-                url: 'https://drive.google.com/uc?export=download&id=19HJmztKt5aI4L8oFtRT10I6ICwWhXWXG',
+                url: 'https://drive.google.com/uc?export=download&id=19HJmztKt5aI4L8oFtRT10I6ICcwWhXWXG',
                 filename: 'Connectify.apk'
             },
             timeTable: {
